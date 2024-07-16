@@ -11,67 +11,33 @@ import {
   UnorderedList,
   Button,
 } from '@chakra-ui/react';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 const OfferLetter = () => {
-  const handleDownload = () => {
-    const element = document.createElement('a');
-    const file = new Blob(
-      [
-        `Date: [Date]
-        Dear [Candidate Name],
-        
-        We are pleased to offer you the position of [Job Title] at CodeCraze Software Solutions. We are excited to have you join our team and contribute to our ongoing success.
-
-        The terms of your employment are as follows:
-        - Position: [Job Title]
-        - Start Date: [Start Date]
-        - Salary: [Salary] per annum
-        - Benefits: [Benefits]
-
-        We look forward to your acceptance of this offer. Please sign and return this letter by [Response Deadline].
-
-        Welcome to the CodeCraze Software Solutions team!
-
-        Sincerely,
-        [Your Name]
-        [Your Job Title]
-        CodeCraze Software Solutions
-
-        This includes basic salary and other allowances benefits, perquisites, etc as per the compensation policy of the company. Refer Annexure - A for compensation break up.
-
-        Your joining date: 01-11-2023
-        Job Location: 54 A Ramji villa Dhambare layout, Outer Ring Road, Trimurtee Nagar, Nagpur, Maharashtra 440022.
-        Reporting Manager: CEO, Directors, Department Heads
-        Timings: 10.00 AM TO 7.00 PM
-
-        Terms and Conditions:
-        1. If an Employee joins the Company's Client, then verification and any experience letter will not be provided by the company and legal action will be taken.
-        2. Office Timing will be 10.00 AM to 7.00 PM and Report to Ms. Payal Kedar & Ms. Madhuri Chandock.
-        3. Sandwich Holiday consider (Any Employee taking half day leave)
-        4. Salary will be released between the 7th and 15th of every month (any query regarding salary contact Darshan sir).
-        5. From the date of joining, you will be on a 3-month probation period. If your performance is not up to the mark, you will be terminated.
-        6. If an Employee wants leave for any reason, you have to drop a mail before 9 AM. After that, no acceptance of leave requests and you will be marked absent. Also, salary for 1 ½ day will be deducted.
-        7. If an Employee joins our company, then HE/SHE should work for our company, not for other freelancers at the same time.
-        8. Company information should not be disclosed; otherwise, legal action will be taken.
-        9. For onboarding-related documentation, contact HR Payal Kedar.
-        10. If you don’t serve a 1-month notice period, then you will not get an Experience Letter & you will not get ex-employee verification from our side.
-
-        Please sign the offer letter as a token of your acceptance and return the same to us. On your day of joining, you are requested to contact Ms. Payal Kedar.
-
-        We are sure that our working environment will be conducive to helping you grow professionally as well as personally.
-        `,
-      ],
-      { type: 'text/plain' }
-    );
-    element.href = URL.createObjectURL(file);
-    element.download = 'OfferLetter.txt';
-    document.body.appendChild(element);
-    element.click();
+  const handleDownloadPDF = () => {
+    const input = document.getElementById('offer-letter');
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('OfferLetter.pdf');
+    });
   };
 
   return (
     <Box bgGradient="linear(to-r, teal.500, green.500)" p={4} w="100%">
-      <Container maxW="container.xl" bg="white" p={6} borderRadius="md" boxShadow="xl">
+      <Container
+        id="offer-letter"
+        maxW="container.xl"
+        bg="white"
+        p={6}
+        borderRadius="md"
+        boxShadow="xl"
+      >
         <Flex direction="column" align="center" mb={6}>
           <Heading as="h1" size="xl" mb={2}>
             CodeCraze Software Solutions
@@ -183,7 +149,7 @@ const OfferLetter = () => {
           </Text>
         </Box>
         <Flex justify="center">
-          <Button colorScheme="teal" onClick={handleDownload}>
+          <Button colorScheme="teal" onClick={handleDownloadPDF}>
             Download Offer Letter
           </Button>
         </Flex>
