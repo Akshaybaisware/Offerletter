@@ -16,6 +16,9 @@ import html2canvas from 'html2canvas';
 
 const OfferLetter = () => {
   const handleDownloadPDF = () => {
+    const button = document.getElementById('download-button');
+    button.style.display = 'none';
+    
     const input = document.getElementById('offer-letter');
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
@@ -25,6 +28,8 @@ const OfferLetter = () => {
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       pdf.save('OfferLetter.pdf');
+      
+      button.style.display = 'block';  // Show the button again after PDF is generated
     });
   };
 
@@ -149,7 +154,7 @@ const OfferLetter = () => {
           </Text>
         </Box>
         <Flex justify="center">
-          <Button colorScheme="teal" onClick={handleDownloadPDF}>
+          <Button id="download-button" colorScheme="teal" onClick={handleDownloadPDF}>
             Download Offer Letter
           </Button>
         </Flex>
