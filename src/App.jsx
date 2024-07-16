@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import bg from "./assets/bg.webp"
 
 const OfferLetter = () => {
   const handleDownloadPDF = () => {
@@ -34,11 +35,18 @@ const OfferLetter = () => {
   };
 
   return (
-    <Box bgGradient="linear(to-r, teal.500, green.500)" p={4} w="100%">
+    <Box
+      bgImage={bg}
+      bgPosition="center"
+      bgRepeat="no-repeat"
+      bgSize="cover"
+      p={4}
+      w="100%"
+    >
       <Container
         id="offer-letter"
         maxW="container.xl"
-        bg="white"
+     
         p={6}
         borderRadius="md"
         boxShadow="xl"
